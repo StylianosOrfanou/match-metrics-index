@@ -1,32 +1,29 @@
-from engines.prediction_engine import predict_match
-
-from models.match import Match
-from models.team import Team
+from engines.prediction_engine import PredictionEngine
 
 from presentation.terminal_presenter import (
-    display_prediction
+    display_prediction,
 )
 
-
-home_team = Team(
-    name="Pafos",
-    attack_rating=82,
-    defence_rating=78,
-    form_rating=80
+from repositories.in_memory_team_repository import (
+    InMemoryTeamRepository,
 )
 
-away_team = Team(
-    name="Omonia",
-    attack_rating=75,
-    defence_rating=80,
-    form_rating=74
-)
+from services.match_service import MatchService
 
-match = Match(
-    home_team=home_team,
-    away_team=away_team
-)
 
-prediction = predict_match(match)
+def main():
+    repository = InMemoryTeamRepository()
+    match_service = MatchService(repository)
 
-display_prediction(prediction)
+    match = match_service.create_match(
+        home_team_name="Pafos FC",
+        away_team_name="Omonia",
+    )
+
+    prediction_engine = PredictionEngine()
+    prediction = prediction_engine.predict(match)
+    display_prediction(prediction)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,6 @@
 import pytest
 
-from engines.prediction_engine import predict_match
+from engines.prediction_engine import PredictionEngine
 
 from models.match import Match
 from models.prediction import Prediction
@@ -36,20 +36,22 @@ def match(home_team, away_team):
 
 
 def test_engine_returns_prediction_object(match):
-    prediction = predict_match(match)
-
+    engine = PredictionEngine()
+    prediction = engine.predict(match)
     assert isinstance(prediction, Prediction)
 
 
 def test_prediction_contains_both_teams(match):
-    prediction = predict_match(match)
+    engine = PredictionEngine()
+    prediction = engine.predict(match)
 
     assert prediction.home_team.name == "Pafos"
     assert prediction.away_team.name == "Omonia"
 
 
 def test_prediction_contains_expected_goals(match):
-    prediction = predict_match(match)
+    engine = PredictionEngine()
+    prediction = engine.predict(match)
 
     assert prediction.home_team.expected_goals > 0
     assert prediction.away_team.expected_goals > 0
@@ -58,7 +60,8 @@ def test_prediction_contains_expected_goals(match):
 def test_prediction_probabilities_total_one_hundred(
     match
 ):
-    prediction = predict_match(match)
+    engine = PredictionEngine()
+    prediction = engine.predict(match)
 
     total_probability = (
         prediction.home_win
@@ -73,11 +76,13 @@ def test_prediction_probabilities_total_one_hundred(
 
 
 def test_prediction_contains_score_matrix(match):
-    prediction = predict_match(match)
-
+    engine = PredictionEngine()
+    prediction = engine.predict(match)
     assert len(prediction.score_matrix) > 0
 
 
 def test_prediction_rejects_invalid_match():
+    engine = PredictionEngine()
+
     with pytest.raises(TypeError):
-        predict_match("Pafos vs Omonia")
+        engine.predict("Pafos vs Omonia")
