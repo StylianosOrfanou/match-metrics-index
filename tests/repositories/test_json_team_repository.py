@@ -59,3 +59,37 @@ def test_repository_raises_error_when_file_does_not_exist(
         JsonTeamRepository(
             file_path=str(missing_file)
         )
+def test_repository_raises_error_for_invalid_json(tmp_path):
+    teams_file = tmp_path / "teams.json"
+
+    teams_file.write_text(
+        "{ invalid json }",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(json.JSONDecodeError):
+        JsonTeamRepository(
+            file_path=str(teams_file)
+        )
+
+
+def test_repository_raises_error_for_missing_team_field(tmp_path):
+    teams_file = tmp_path / "teams.json"
+
+    teams_data = [
+        {
+            "name": "Pafos FC",
+            "attack_rating": 82,
+            "defence_rating": 80,
+        }
+    ]
+
+    teams_file.write_text(
+        json.dumps(teams_data),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(KeyError):
+        JsonTeamRepository(
+            file_path=str(teams_file)
+        )
