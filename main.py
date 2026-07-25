@@ -4,15 +4,17 @@ from presentation.terminal_presenter import (
     display_prediction,
 )
 
-from repositories.in_memory_team_repository import (
-    InMemoryTeamRepository,
+from repositories.json_team_repository import (
+    JsonTeamRepository,
 )
 
 from services.match_service import MatchService
 
 
 def main():
-    repository = InMemoryTeamRepository()
+    repository = JsonTeamRepository(
+        file_path="data/teams.json"
+    )
     match_service = MatchService(repository)
 
     match = match_service.create_match(

@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Aris Limassol",
+        "attack_rating": 80,
+        "defence_rating": 75,
+        "form_rating": 85
+    },
+    {
+        "name": "Pafos FC",
+        "attack_rating": 82,
+        "defence_rating": 80,
+        "form_rating": 78
+    },
+    {
+        "name": "Omonia",
+        "attack_rating": 79,
+        "defence_rating": 74,
+        "form_rating": 81
+    }
+]
