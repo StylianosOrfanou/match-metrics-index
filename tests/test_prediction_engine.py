@@ -2,10 +2,11 @@ import pytest
 
 from engines.prediction_engine import PredictionEngine
 
+from models.league import League
 from models.match import Match
 from models.prediction import Prediction
 from models.team import Team
-from models.league import League
+
 
 league = League(
     name="Cyprus First Division",
@@ -14,6 +15,7 @@ league = League(
     home_advantage=1.06,
 )
 
+
 @pytest.fixture
 def home_team():
     return Team(
@@ -21,7 +23,9 @@ def home_team():
         league=league,
         attack_rating=82,
         defence_rating=78,
-        form_rating=80
+        form_rating=80,
+        home_strength=84,
+        away_strength=79,
     )
 
 
@@ -32,7 +36,9 @@ def away_team():
         league=league,
         attack_rating=75,
         defence_rating=80,
-        form_rating=74
+        form_rating=74,
+        home_strength=80,
+        away_strength=76,
     )
 
 
@@ -40,13 +46,14 @@ def away_team():
 def match(home_team, away_team):
     return Match(
         home_team=home_team,
-        away_team=away_team
+        away_team=away_team,
     )
 
 
 def test_engine_returns_prediction_object(match):
     engine = PredictionEngine()
     prediction = engine.predict(match)
+
     assert isinstance(prediction, Prediction)
 
 
@@ -67,7 +74,7 @@ def test_prediction_contains_expected_goals(match):
 
 
 def test_prediction_probabilities_total_one_hundred(
-    match
+    match,
 ):
     engine = PredictionEngine()
     prediction = engine.predict(match)
@@ -80,13 +87,14 @@ def test_prediction_probabilities_total_one_hundred(
 
     assert total_probability == pytest.approx(
         100,
-        abs=0.2
+        abs=0.2,
     )
 
 
 def test_prediction_contains_score_matrix(match):
     engine = PredictionEngine()
     prediction = engine.predict(match)
+
     assert len(prediction.score_matrix) > 0
 
 

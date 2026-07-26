@@ -1,6 +1,7 @@
+from models.league import League
 from models.team import Team
 from repositories.team_repository import TeamRepository
-from models.league import League
+
 
 class InMemoryTeamRepository(TeamRepository):
 
@@ -22,6 +23,8 @@ class InMemoryTeamRepository(TeamRepository):
             attack_rating=80,
             defence_rating=75,
             form_rating=85,
+            home_strength=84,
+            away_strength=79,
         )
 
         pafos = Team(
@@ -30,6 +33,8 @@ class InMemoryTeamRepository(TeamRepository):
             attack_rating=82,
             defence_rating=80,
             form_rating=78,
+            home_strength=85,
+            away_strength=81,
         )
 
         omonia = Team(
@@ -38,6 +43,8 @@ class InMemoryTeamRepository(TeamRepository):
             attack_rating=79,
             defence_rating=74,
             form_rating=81,
+            home_strength=83,
+            away_strength=77,
         )
 
         self._teams[aris.name] = aris
@@ -46,6 +53,8 @@ class InMemoryTeamRepository(TeamRepository):
 
     def get_team(self, name: str) -> Team:
         if name not in self._teams:
-            raise ValueError(f"Team '{name}' was not found.")
+            raise ValueError(
+                f"Team '{name}' was not found."
+            )
 
         return self._teams[name]

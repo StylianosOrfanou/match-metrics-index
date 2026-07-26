@@ -10,28 +10,28 @@ class Team:
     attack_rating: float
     defence_rating: float
     form_rating: float
+    home_strength: float
+    away_strength: float
 
     def __post_init__(self):
         if not self.name.strip():
-            raise ValueError(
-                "Team name cannot be empty."
-            )
+            raise ValueError("Team name cannot be empty.")
 
         if not isinstance(self.league, League):
-            raise TypeError(
-                "league must be a League object."
-            )
+            raise TypeError("league must be a League object.")
 
-        ratings = (
-            self.attack_rating,
-            self.defence_rating,
-            self.form_rating,
-        )
+        ratings = {
+            "attack_rating": self.attack_rating,
+            "defence_rating": self.defence_rating,
+            "form_rating": self.form_rating,
+            "home_strength": self.home_strength,
+            "away_strength": self.away_strength,
+        }
 
-        for rating in ratings:
-            if rating < 0 or rating > 100:
+        for rating_name, rating_value in ratings.items():
+            if not 0 <= rating_value <= 100:
                 raise ValueError(
-                    "Ratings must be between 0 and 100."
+                    f"{rating_name} must be between 0 and 100."
                 )
 
     @property

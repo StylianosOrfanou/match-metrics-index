@@ -42,6 +42,8 @@ def test_get_team_returns_existing_team(tmp_path):
             "attack_rating": 82,
             "defence_rating": 80,
             "form_rating": 78,
+            "home_strength": 85,
+            "away_strength": 81,
         }
     ]
 

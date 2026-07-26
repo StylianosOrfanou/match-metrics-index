@@ -40,6 +40,8 @@ class JsonTeamRepository(TeamRepository):
                 attack_rating=team_data["attack_rating"],
                 defence_rating=team_data["defence_rating"],
                 form_rating=team_data["form_rating"],
+                home_strength=team_data["home_strength"],
+                away_strength=team_data["away_strength"],
             )
 
             self._teams[team.name] = team

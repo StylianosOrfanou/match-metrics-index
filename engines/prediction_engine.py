@@ -12,6 +12,11 @@ from models.prediction import (
     ScorePrediction,
     TeamPrediction,
 )
+from config.settings import (
+    ATTACK_WEIGHT,
+    FORM_WEIGHT,
+    VENUE_WEIGHT,
+)
 
 
 class PredictionEngine:
@@ -24,13 +29,15 @@ class PredictionEngine:
         away_team = match.away_team
 
         home_matchup = self._calculate_matchup(
-            team=home_team,
-            opponent=away_team,
+            team=match.home_team,
+            opponent=match.away_team,
+            is_home=True,
         )
 
         away_matchup = self._calculate_matchup(
-            team=away_team,
-            opponent=home_team,
+            team=match.away_team,
+            opponent=match.home_team,
+            is_home=False,
         )
 
         home_xg = self._calculate_xg(
@@ -94,9 +101,22 @@ class PredictionEngine:
         self,
         team: Team,
         opponent: Team,
+        is_home: bool,
     ) -> float:
+        venue_strength = (
+            team.home_strength
+            if is_home
+            else team.away_strength
+        )
+
+        weighted_attack = (
+            team.attack_rating * ATTACK_WEIGHT
+            + team.form_rating * FORM_WEIGHT
+            + venue_strength * VENUE_WEIGHT
+        )
+
         return calculate_matchup_rating(
-            team_attack=team.attack_rating,
+            team_attack=weighted_attack,
             opponent_defence=opponent.defence_rating,
         )
 
