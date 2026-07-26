@@ -1,0 +1,35 @@
+[
+  {
+    "date": "2026-07-20",
+    "competition": "Cyprus First Division",
+    "home_team": "Pafos FC",
+    "away_team": "Omonia",
+    "home_goals": 2,
+    "away_goals": 1,
+    "bookmaker_home": 0.42,
+    "bookmaker_draw": 0.29,
+    "bookmaker_away": 0.29
+  },
+  {
+    "date": "2026-07-21",
+    "competition": "Cyprus First Division",
+    "home_team": "Omonia",
+    "away_team": "Pafos FC",
+    "home_goals": 1,
+    "away_goals": 1,
+    "bookmaker_home": 0.38,
+    "bookmaker_draw": 0.31,
+    "bookmaker_away": 0.31
+  },
+  {
+    "date": "2026-07-22",
+    "competition": "Cyprus First Division",
+    "home_team": "Pafos FC",
+    "away_team": "Omonia",
+    "home_goals": 0,
+    "away_goals": 1,
+    "bookmaker_home": 0.45,
+    "bookmaker_draw": 0.29,
+    "bookmaker_away": 0.26
+  }
+]
