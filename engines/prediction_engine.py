@@ -7,6 +7,7 @@ from engines.poisson import calculate_goal_probabilities
 from models.match import Match
 from models.team import Team
 from models.matchup import calculate_matchup_rating
+from models.league import League
 from models.prediction import (
     Prediction,
     ScorePrediction,
@@ -42,11 +43,13 @@ class PredictionEngine:
 
         home_xg = self._calculate_xg(
             matchup_rating=home_matchup,
+            league=match.home_team.league,
             is_home=True,
         )
 
         away_xg = self._calculate_xg(
             matchup_rating=away_matchup,
+            league=match.home_team.league,
             is_home=False,
         )
 
@@ -123,10 +126,12 @@ class PredictionEngine:
     def _calculate_xg(
         self,
         matchup_rating: float,
+        league: League,
         is_home: bool,
     ) -> float:
         return calculate_expected_goals(
             matchup_rating=matchup_rating,
+            league=league,
             is_home=is_home,
         )
 
