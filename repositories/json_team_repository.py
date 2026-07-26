@@ -1,14 +1,19 @@
 import json
 from pathlib import Path
-
+from repositories.league_repository import LeagueRepository
 from models.team import Team
 from repositories.team_repository import TeamRepository
 
 
 class JsonTeamRepository(TeamRepository):
 
-    def __init__(self, file_path: str):
+    def __init__(
+        self,
+        file_path: str,
+        league_repository: LeagueRepository,
+    ):
         self._file_path = Path(file_path)
+        self._league_repository = league_repository
         self._teams = {}
         self._load_teams()
 
@@ -25,8 +30,13 @@ class JsonTeamRepository(TeamRepository):
             teams_data = json.load(file)
 
         for team_data in teams_data:
+            league = self._league_repository.get_league(
+                team_data["league"]
+            )
+
             team = Team(
                 name=team_data["name"],
+                league=league,
                 attack_rating=team_data["attack_rating"],
                 defence_rating=team_data["defence_rating"],
                 form_rating=team_data["form_rating"],

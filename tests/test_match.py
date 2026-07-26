@@ -2,12 +2,20 @@ import pytest
 
 from models.match import Match
 from models.team import Team
+from models.league import League
 
+league = League(
+    name="Cyprus First Division",
+    country="Cyprus",
+    average_goals=2.65,
+    home_advantage=1.06,
+)
 
 @pytest.fixture
 def pafos():
     return Team(
         name="Pafos",
+        league=league,
         attack_rating=82,
         defence_rating=78,
         form_rating=80
@@ -18,6 +26,7 @@ def pafos():
 def omonia():
     return Team(
         name="Omonia",
+        league=league,
         attack_rating=75,
         defence_rating=80,
         form_rating=74

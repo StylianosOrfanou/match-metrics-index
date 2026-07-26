@@ -1,52 +1,47 @@
 from dataclasses import dataclass
 
-from models.team_rating import calculate_team_rating
+from models.league import League
 
 
-@dataclass
+@dataclass(frozen=True)
 class Team:
-    """
-    Αντιπροσωπεύει μία ποδοσφαιρική ομάδα
-    και τα βασικά ratings της.
-    """
-
     name: str
+    league: League
     attack_rating: float
     defence_rating: float
     form_rating: float
 
     def __post_init__(self):
-        if not isinstance(self.name, str):
-            raise ValueError("Team name must be text.")
-
         if not self.name.strip():
-            raise ValueError("Team name cannot be empty.")
+            raise ValueError(
+                "Team name cannot be empty."
+            )
 
-        ratings = {
-            "attack_rating": self.attack_rating,
-            "defence_rating": self.defence_rating,
-            "form_rating": self.form_rating
-        }
+        if not isinstance(self.league, League):
+            raise TypeError(
+                "league must be a League object."
+            )
 
-        for rating_name, rating_value in ratings.items():
-            if not isinstance(rating_value, (int, float)):
+        ratings = (
+            self.attack_rating,
+            self.defence_rating,
+            self.form_rating,
+        )
+
+        for rating in ratings:
+            if rating < 0 or rating > 100:
                 raise ValueError(
-                    f"{rating_name} must be a number."
-                )
-
-            if rating_value < 0 or rating_value > 100:
-                raise ValueError(
-                    f"{rating_name} must be between 0 and 100."
+                    "Ratings must be between 0 and 100."
                 )
 
     @property
-    def overall_rating(self):
-        """
-        Υπολογίζει αυτόματα το συνολικό Team Rating.
-        """
-
-        return calculate_team_rating(
-            form_rating=self.form_rating,
-            attack_rating=self.attack_rating,
-            defence_rating=self.defence_rating
+    def overall_rating(self) -> float:
+        return round(
+            (
+                self.attack_rating
+                + self.defence_rating
+                + self.form_rating
+            )
+            / 3,
+            2,
         )
