@@ -2,11 +2,12 @@
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 ![Tests](https://img.shields.io/badge/Tests-101%20Passing-brightgreen)
-![Version](https://img.shields.io/badge/Version-v1.0-orange)
+![GitHub release](https://img.shields.io/github/v/release/StylianosOrfanou/match-metrics-index)
+![License](https://img.shields.io/github/license/StylianosOrfanou/match-metrics-index)
 
 ## Overview
 
-**Match Metrics Index (MMI)** is a football match prediction engine built in Python.
+MMI (Match Metrics Index) is a football prediction engine that transforms raw football data into dynamic team ratings and probabilistic match predictions using statistical modelling and Monte Carlo simulation.
 
 The project combines **season statistics**, **recent team form**, **dynamic rating generation**, **Poisson probability modelling**, and **Monte Carlo simulation** to generate accurate football match predictions.
 
