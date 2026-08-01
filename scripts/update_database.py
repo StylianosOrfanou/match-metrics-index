@@ -1,11 +1,15 @@
-from engines.rating_builder import RatingBuilder
-from engines.rating_fusion_engine import RatingFusionEngine
+from engines.rating_builder import (
+    RatingBuilder,
+)
+from engines.rating_fusion_engine import (
+    RatingFusionEngine,
+)
 from engines.recent_form_rating_builder import (
     RecentFormRatingBuilder,
 )
-
-from exporters.json_team_exporter import JsonTeamExporter
-
+from exporters.json_team_exporter import (
+    JsonTeamExporter,
+)
 from repositories.json_league_repository import (
     JsonLeagueRepository,
 )
@@ -15,7 +19,9 @@ from repositories.sportmonks_recent_form_repository import (
 from repositories.sportmonks_team_statistics_repository import (
     SportmonksTeamStatisticsRepository,
 )
-
+from services.database_update_service import (
+    DatabaseUpdateService,
+)
 from services.rating_pipeline_service import (
     RatingPipelineService,
 )
@@ -44,7 +50,7 @@ TEAM_IDS = {
 
 def main() -> None:
     print()
-    print("BUILDING MMI TEAMS")
+    print("MMI DATABASE UPDATE")
     print("-" * 70)
 
     league_repository = JsonLeagueRepository(
@@ -55,63 +61,20 @@ def main() -> None:
         LEAGUE_NAME,
     )
 
-    print("Loading season statistics...")
-
     statistics_repository = (
         SportmonksTeamStatisticsRepository(
             season_id=CYPRUS_SEASON_ID,
         )
     )
 
-    season_statistics = (
-        statistics_repository.get_all()
-    )
-
-    print(
-        f"Season statistics loaded: "
-        f"{len(season_statistics)} teams"
-    )
-
-    print()
-    print("Loading recent form...")
-
-    recent_repository = (
+    recent_form_repository = (
         SportmonksRecentFormRepository(
             season_id=CYPRUS_SEASON_ID,
             matches_limit=5,
         )
     )
 
-    recent_forms = {}
-
-    for index, (
-        team_name,
-        team_id,
-    ) in enumerate(
-        TEAM_IDS.items(),
-        start=1,
-    ):
-        print(
-            f"Loading recent form "
-            f"{index}/{len(TEAM_IDS)}: "
-            f"{team_name}"
-        )
-
-        recent_forms[team_name] = (
-            recent_repository.get_for_team(
-                team_id=team_id,
-            )
-        )
-
-    print(
-        f"Recent forms loaded: "
-        f"{len(recent_forms)} teams"
-    )
-
-    print()
-    print("Building final fused ratings...")
-
-    pipeline = RatingPipelineService(
+    rating_pipeline = RatingPipelineService(
         season_rating_builder=RatingBuilder(),
         recent_rating_builder=(
             RecentFormRatingBuilder()
@@ -119,34 +82,60 @@ def main() -> None:
         fusion_engine=RatingFusionEngine(),
     )
 
-    teams = pipeline.build(
-        season_statistics=season_statistics,
-        recent_forms=recent_forms,
-        league=league,
-    )
-
-    print(
-        f"Team objects created: {len(teams)}"
-    )
-
-    print("Writing data/teams.json...")
-
     exporter = JsonTeamExporter(
         file_path="data/teams.json",
     )
 
-    exporter.export(
-        teams
+    update_service = DatabaseUpdateService(
+        statistics_repository=(
+            statistics_repository
+        ),
+        recent_form_repository=(
+            recent_form_repository
+        ),
+        rating_pipeline=rating_pipeline,
+        exporter=exporter,
+        team_ids=TEAM_IDS,
+        teams_file_path="data/teams.json",
+        backup_directory=(
+            "data/backups/teams"
+        ),
     )
 
+    summary = update_service.update(
+        league=league,
+    )
+
+    print()
     print("-" * 70)
+    print("UPDATE SUMMARY")
+    print("-" * 70)
+
     print(
-        f"SUCCESS: {len(teams)} teams exported."
+        f"Season statistics: "
+        f"{summary.statistics_loaded}"
     )
+
     print(
-        "Season and recent-form ratings fused."
+        f"Recent forms: "
+        f"{summary.recent_forms_loaded}"
     )
-    print("data/teams.json updated.")
+
+    print(
+        f"Teams exported: "
+        f"{summary.teams_exported}"
+    )
+
+    if summary.backup_path is None:
+        print("Backup: Not required")
+    else:
+        print(
+            f"Backup: "
+            f"{summary.backup_path}"
+        )
+
+    print("-" * 70)
+    print("DATABASE UPDATE COMPLETED")
 
 
 if __name__ == "__main__":
