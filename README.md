@@ -1,4 +1,4 @@
-# ⚽ Mezes Match Index (MMI)
+# ⚽ Match Metrics Index (MMI)
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 ![Tests](https://img.shields.io/badge/Tests-101%20Passing-brightgreen)
@@ -6,7 +6,7 @@
 
 ## Overview
 
-**Mezes Match Index (MMI)** is a football match prediction engine built in Python.
+**Match Metrics Index (MMI)** is a football match prediction engine built in Python.
 
 The project combines **season statistics**, **recent team form**, **dynamic rating generation**, **Poisson probability modelling**, and **Monte Carlo simulation** to generate accurate football match predictions.
 
