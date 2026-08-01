@@ -1,6 +1,4 @@
-from clients.sportmonks_client import (
-    SportmonksClient,
-)
+from clients.sportmonks_client import SportmonksClient
 
 
 CYPRUS_SEASON_ID = 25996
@@ -57,7 +55,7 @@ def get_current_score(
 def main() -> None:
     client = SportmonksClient()
 
-    response = client.get(
+    season_response = client.get(
         f"seasons/{CYPRUS_SEASON_ID}",
         params={
             "include": (
@@ -67,7 +65,7 @@ def main() -> None:
         },
     )
 
-    season = response["data"]
+    season = season_response["data"]
 
     fixtures = season.get(
         "fixtures",
@@ -76,15 +74,19 @@ def main() -> None:
 
     print("\nCYPRUS FIXTURE AUDIT")
     print("-" * 70)
-    print(f"Season: {season['name']}")
+    print(f"Season: {season.get('name')}")
     print(f"Fixtures returned: {len(fixtures)}")
     print("-" * 70)
 
     fixtures.sort(
-        key=lambda fixture: fixture["starting_at"]
+        key=lambda fixture: fixture.get(
+            "starting_at",
+            "",
+        )
     )
-    
-    for fixture in fixtures:
+
+    # Τυπώνουμε μόνο 5 fixtures.
+    for fixture in fixtures[:5]:
         home_team = get_team_name(
             fixture,
             "home",
@@ -106,12 +108,65 @@ def main() -> None:
         )
 
         print(
-            f"{fixture['id']} | "
-            f"{fixture['starting_at']} | "
+            f"{fixture.get('id')} | "
+            f"{fixture.get('starting_at')} | "
             f"{home_team} "
             f"{home_score}-{away_score} "
             f"{away_team}"
         )
+
+    if not fixtures:
+        print("\nNo fixtures available for odds audit.")
+        return
+
+    # Το odds audit είναι ΕΞΩ από το fixture loop.
+    test_fixture = fixtures[0]
+    test_fixture_id = test_fixture["id"]
+
+    print("\nODDS ACCESS AUDIT")
+    print("-" * 70)
+    print(f"Fixture ID: {test_fixture_id}")
+
+    try:
+        odds_response = client.get(
+            f"odds/pre-match/fixtures/{test_fixture_id}",
+            params={
+                "include": "bookmaker",
+            },
+        )
+
+        print("Odds request completed.")
+
+        odds = odds_response.get(
+            "data",
+            [],
+        )
+
+        print(f"Odds returned: {len(odds)}")
+
+        # <<< ΒΑΖΕΙΣ ΤΟΝ ΚΩΔΙΚΑ ΕΔΩ >>>
+
+        bookmakers = {}
+
+        for odd in odds:
+            bookmaker = odd.get("bookmaker")
+
+            if bookmaker:
+                bookmakers[
+                    bookmaker["id"]
+                ] = bookmaker["name"]
+
+        print("\nBOOKMAKERS")
+        print("-" * 70)
+
+        for bookmaker_id, name in sorted(
+            bookmakers.items()
+        ):
+            print(f"{bookmaker_id}: {name}")
+
+    except Exception as error:
+        print(type(error).__name__)
+        print(error)
 
 
 if __name__ == "__main__":

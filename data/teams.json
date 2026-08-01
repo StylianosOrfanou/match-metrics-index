@@ -1,29 +1,128 @@
 [
     {
-        "name": "Aris Limassol",
+        "name": "AEK Larnaca",
         "league": "Cyprus First Division",
-        "attack_rating": 80,
-        "defence_rating": 75,
-        "form_rating": 85,
-        "home_strength": 84,
-        "away_strength": 79
+        "attack_rating": 65.65,
+        "defence_rating": 84.29,
+        "form_rating": 78.44,
+        "home_strength": 72.9,
+        "away_strength": 76.99
     },
     {
-        "name": "Pafos FC",
+        "name": "AEL",
         "league": "Cyprus First Division",
-        "attack_rating": 82,
-        "defence_rating": 80,
-        "form_rating": 78,
-        "home_strength": 85,
-        "away_strength": 81
+        "attack_rating": 47.43,
+        "defence_rating": 64.14,
+        "form_rating": 59.13,
+        "home_strength": 54.52,
+        "away_strength": 58.38
+    },
+    {
+        "name": "APOEL",
+        "league": "Cyprus First Division",
+        "attack_rating": 64.46,
+        "defence_rating": 70.14,
+        "form_rating": 62.81,
+        "home_strength": 60.01,
+        "away_strength": 67.79
+    },
+    {
+        "name": "Akritas",
+        "league": "Cyprus First Division",
+        "attack_rating": 41.1,
+        "defence_rating": 48.29,
+        "form_rating": 50.1,
+        "home_strength": 34.78,
+        "away_strength": 53.03
+    },
+    {
+        "name": "Anorthosis",
+        "league": "Cyprus First Division",
+        "attack_rating": 54.33,
+        "defence_rating": 71.86,
+        "form_rating": 60.13,
+        "home_strength": 61.25,
+        "away_strength": 49.44
+    },
+    {
+        "name": "Apollon",
+        "league": "Cyprus First Division",
+        "attack_rating": 64.15,
+        "defence_rating": 74.86,
+        "form_rating": 76.61,
+        "home_strength": 68.6,
+        "away_strength": 61.83
+    },
+    {
+        "name": "Aris Limassol",
+        "league": "Cyprus First Division",
+        "attack_rating": 64.74,
+        "defence_rating": 70.14,
+        "form_rating": 61.89,
+        "home_strength": 76.96,
+        "away_strength": 59.7
+    },
+    {
+        "name": "Enosis",
+        "league": "Cyprus First Division",
+        "attack_rating": 20.0,
+        "defence_rating": 20.0,
+        "form_rating": 20.0,
+        "home_strength": 20.0,
+        "away_strength": 20.0
+    },
+    {
+        "name": "Ethnikos Achna",
+        "league": "Cyprus First Division",
+        "attack_rating": 44.53,
+        "defence_rating": 54.71,
+        "form_rating": 48.09,
+        "home_strength": 56.6,
+        "away_strength": 41.96
+    },
+    {
+        "name": "Krasava ENY Ypsonas FC",
+        "league": "Cyprus First Division",
+        "attack_rating": 47.84,
+        "defence_rating": 66.71,
+        "form_rating": 55.12,
+        "home_strength": 56.52,
+        "away_strength": 52.27
+    },
+    {
+        "name": "Olympiakos",
+        "league": "Cyprus First Division",
+        "attack_rating": 39.84,
+        "defence_rating": 66.71,
+        "form_rating": 55.12,
+        "home_strength": 47.95,
+        "away_strength": 56.0
+    },
+    {
+        "name": "Omonia Aradippou",
+        "league": "Cyprus First Division",
+        "attack_rating": 47.88,
+        "defence_rating": 69.29,
+        "form_rating": 57.12,
+        "home_strength": 46.33,
+        "away_strength": 57.42
     },
     {
         "name": "Omonia",
         "league": "Cyprus First Division",
-        "attack_rating": 79,
-        "defence_rating": 74,
-        "form_rating": 81,
-        "home_strength": 83,
-        "away_strength": 77
+        "attack_rating": 95.0,
+        "defence_rating": 95.0,
+        "form_rating": 95.0,
+        "home_strength": 95.0,
+        "away_strength": 95.0
+    },
+    {
+        "name": "Pafos FC",
+        "league": "Cyprus First Division",
+        "attack_rating": 77.41,
+        "defence_rating": 78.29,
+        "form_rating": 72.01,
+        "home_strength": 79.54,
+        "away_strength": 71.1
     }
 ]

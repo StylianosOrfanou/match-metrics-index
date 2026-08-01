@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Aris Limassol",
+        "league": "Cyprus First Division",
+        "attack_rating": 80,
+        "defence_rating": 75,
+        "form_rating": 85,
+        "home_strength": 84,
+        "away_strength": 79
+    },
+    {
+        "name": "Pafos FC",
+        "league": "Cyprus First Division",
+        "attack_rating": 82,
+        "defence_rating": 80,
+        "form_rating": 78,
+        "home_strength": 85,
+        "away_strength": 81
+    },
+    {
+        "name": "Omonia",
+        "league": "Cyprus First Division",
+        "attack_rating": 79,
+        "defence_rating": 74,
+        "form_rating": 81,
+        "home_strength": 83,
+        "away_strength": 77
+    }
+]
