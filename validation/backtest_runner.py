@@ -3,6 +3,7 @@ from validation.backtest_report import (
 )
 from validation.metrics import (
     three_way_brier_score,
+    three_way_log_loss,
 )
 
 
@@ -25,6 +26,7 @@ class BacktestRunner:
 
         correct_predictions = 0
         brier_scores = []
+        log_losses = []
 
         for fixture in fixtures:
             probabilities = self._predictor.predict(
@@ -50,6 +52,13 @@ class BacktestRunner:
                 )
             )
 
+            log_losses.append(
+                three_way_log_loss(
+                    probabilities=probabilities,
+                    actual_result=actual_result,
+                )
+            )
+
         total_matches = len(fixtures)
 
         return BacktestReport(
@@ -65,5 +74,9 @@ class BacktestRunner:
                 / total_matches,
                 6,
             ),
-            log_loss=0.0,
+            log_loss=round(
+                sum(log_losses)
+                / total_matches,
+                6,
+            ),
         )

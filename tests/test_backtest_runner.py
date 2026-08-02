@@ -40,3 +40,20 @@ def test_runner_returns_backtest_report():
         report,
         BacktestReport,
     )
+
+def test_runner_calculates_log_loss():
+    runner = BacktestRunner(
+        predictor=FakePredictor(),
+    )
+
+    report = runner.run(
+        [
+            {
+                "home_team": "Team A",
+                "away_team": "Team B",
+                "actual_result": "H",
+            },
+        ]
+    )
+
+    assert report.log_loss > 0

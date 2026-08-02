@@ -109,3 +109,51 @@ def log_loss(
         loss,
         6,
     )
+
+def three_way_log_loss(
+    probabilities: dict[str, float],
+    actual_result: str,
+) -> float:
+    valid_results = {
+        "H",
+        "D",
+        "A",
+    }
+
+    if actual_result not in valid_results:
+        raise ValueError(
+            "actual_result must be H, D or A."
+        )
+
+    if set(probabilities) != valid_results:
+        raise ValueError(
+            "Probabilities must contain H, D and A."
+        )
+
+    for probability in probabilities.values():
+        if not 0 <= probability <= 1:
+            raise ValueError(
+                "Every probability must be "
+                "between 0 and 1."
+            )
+
+    total_probability = sum(
+        probabilities.values()
+    )
+
+    if abs(total_probability - 1.0) > 1e-6:
+        raise ValueError(
+            "Probabilities must sum to 1."
+        )
+
+    epsilon = 1e-15
+
+    actual_probability = max(
+        probabilities[actual_result],
+        epsilon,
+    )
+
+    return round(
+        -math.log(actual_probability),
+        6,
+    )
