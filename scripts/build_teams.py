@@ -1,7 +1,15 @@
 from engines.rating_builder import RatingBuilder
-from engines.rating_fusion_engine import RatingFusionEngine
+
 from engines.recent_form_rating_builder import (
     RecentFormRatingBuilder,
+)
+
+from engines.weighted_rating_engine import (
+    WeightedRatingEngine,
+)
+
+from services.team_signal_factory import (
+    TeamSignalFactory,
 )
 
 from exporters.json_team_exporter import JsonTeamExporter
@@ -116,7 +124,10 @@ def main() -> None:
         recent_rating_builder=(
             RecentFormRatingBuilder()
         ),
-        fusion_engine=RatingFusionEngine(),
+        weighted_rating_engine=(
+            WeightedRatingEngine()
+        ),
+        signal_factory=TeamSignalFactory(),
     )
 
     teams = pipeline.build(
