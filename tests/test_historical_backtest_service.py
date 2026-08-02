@@ -13,42 +13,52 @@ class FakePredictor(
     TimeAwarePredictor,
 ):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.updated = 0
 
     def predict(
         self,
-        fixture,
-    ):
+        fixture: dict,
+    ) -> dict[str, float]:
         return {
-            "H": 0.60,
-            "D": 0.25,
-            "A": 0.15,
+            "H": 0.6,
+            "D": 0.2,
+            "A": 0.2,
         }
 
     def update(
         self,
-        fixture,
-    ):
+        fixture: dict,
+    ) -> None:
         self.updated += 1
 
 
-def test_service_runs_backtest():
+class FakeRepository:
+
+    def load(
+        self,
+    ) -> list[dict]:
+        return [
+            {
+                "home_team": "Pafos FC",
+                "away_team": "Omonia",
+                "actual_result": "H",
+            }
+        ]
+
+
+def test_service_runs_complete_backtest():
+    repository = FakeRepository()
     predictor = FakePredictor()
 
+    fixtures = repository.load()
+
     service = HistoricalBacktestService(
-        predictor,
+        predictor=predictor,
     )
 
     report = service.run(
-        fixtures=[
-            {
-                "actual_result": "H",
-            },
-            {
-                "actual_result": "A",
-            },
-        ]
+        fixtures=fixtures,
     )
 
     assert isinstance(
@@ -56,4 +66,5 @@ def test_service_runs_backtest():
         BacktestReport,
     )
 
-    assert predictor.updated == 2
+    assert report.total_matches == 1
+    assert predictor.updated == 1
