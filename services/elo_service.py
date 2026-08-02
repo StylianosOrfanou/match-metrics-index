@@ -1,6 +1,6 @@
 from engines.elo_engine import EloEngine
-from engines.elo_rating_normalizer import (
-    EloRatingNormalizer,
+from engines.rating_normalizer import (
+    RatingNormalizer,
 )
 from repositories.elo_repository import (
     EloRepository,
@@ -16,7 +16,7 @@ class EloService:
         self,
         repository: EloRepository,
         builder: EloBuilderService | None = None,
-        normalizer: EloRatingNormalizer | None = None,
+        normalizer: RatingNormalizer | None = None,
     ) -> None:
 
         self._repository = repository
@@ -30,7 +30,7 @@ class EloService:
 
         self._normalizer = (
             normalizer
-            or EloRatingNormalizer()
+            or RatingNormalizer()
         )
 
     def build(
@@ -43,6 +43,6 @@ class EloService:
             matches
         )
 
-        return self._normalizer.normalize(
+        return self._normalizer.normalize_mapping(
             elo
         )

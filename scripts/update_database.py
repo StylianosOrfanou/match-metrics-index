@@ -26,8 +26,8 @@ from services.rating_pipeline_service import (
 )
 
 from engines.elo_engine import EloEngine
-from engines.elo_rating_normalizer import (
-    EloRatingNormalizer,
+from engines.rating_normalizer import (
+    RatingNormalizer,
 )
 from repositories.sportmonks_elo_repository import (
     SportmonksEloRepository,
@@ -118,7 +118,7 @@ def main() -> None:
     elo_service = EloService(
         repository=elo_repository,
         builder=elo_builder,
-        normalizer=EloRatingNormalizer(),
+        normalizer=RatingNormalizer(),
     )
 
     exporter = JsonTeamExporter(

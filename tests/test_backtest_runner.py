@@ -57,3 +57,43 @@ def test_runner_calculates_log_loss():
     )
 
     assert report.log_loss > 0
+
+from validation.historical_fixture_repository import (
+    HistoricalFixtureRepository,
+)
+
+
+def test_runner_accepts_repository(tmp_path):
+    filepath = (
+        tmp_path
+        / "fixtures.json"
+    )
+
+    filepath.write_text(
+        """
+[
+    {
+        "home_team":"A",
+        "away_team":"B",
+        "actual_result":"H"
+    }
+]
+""",
+        encoding="utf-8",
+    )
+
+    repository = (
+        HistoricalFixtureRepository(
+            filepath=str(filepath),
+        )
+    )
+
+    runner = BacktestRunner(
+        predictor=FakePredictor(),
+    )
+
+    report = runner.run(
+        repository.load(),
+    )
+
+    assert report.total_matches == 1
