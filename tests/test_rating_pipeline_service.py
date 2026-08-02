@@ -11,6 +11,59 @@ from services.rating_pipeline_service import (
     RatingPipelineService,
 )
 
+from models.team_ratings import TeamRatings
+from engines.recent_form_rating_builder import (
+    RecentFormRatings,
+)
+from services.team_signal_factory import (
+    TeamSignalFactory,
+)
+from engines.weighted_rating_engine import (
+    WeightedRatingEngine,
+)
+
+
+def test_weighted_engine_reproduces_pipeline():
+    factory = TeamSignalFactory()
+
+    season = TeamRatings(
+        attack_rating=80,
+        defence_rating=70,
+        form_rating=60,
+        home_strength=75,
+        away_strength=65,
+    )
+
+    recent = RecentFormRatings(
+        attack_rating=100,
+        defence_rating=90,
+        form_rating=80,
+        home_strength=90,
+        away_strength=70,
+    )
+
+    elo = 85
+
+    result = WeightedRatingEngine().combine(
+        [
+            factory.from_season(
+                season,
+                0.6,
+            ),
+            factory.from_recent(
+                recent,
+                0.3,
+            ),
+            factory.from_elo(
+                elo,
+                0.1,
+            ),
+        ]
+    )
+
+    assert result.attack == pytest.approx(
+        86.5,
+    )
 
 league = League(
     name="Cyprus First Division",
