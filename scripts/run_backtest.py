@@ -1,23 +1,26 @@
 from engines.prediction_engine import (
     PredictionEngine,
 )
-from repositories.json_league_repository import (
-    JsonLeagueRepository,
-)
-from repositories.json_team_repository import (
-    JsonTeamRepository,
-)
-from services.match_service import (
-    MatchService,
-)
+
 from validation.backtest_runner import (
     BacktestRunner,
 )
 from validation.historical_fixture_repository import (
     HistoricalFixtureRepository,
 )
+from validation.historical_mmi_predictor import HistoricalMMIPredictor
 from validation.mmi_time_aware_predictor import (
     MMITimeAwarePredictor,
+)
+from engines.historical_rating_builder import (
+    HistoricalRatingBuilder,
+)
+from models.league import League
+from repositories.historical_team_state_repository import (
+    HistoricalTeamStateRepository,
+)
+from validation.historical_mmi_predictor import (
+    HistoricalMMIPredictor,
 )
 
 
@@ -37,22 +40,24 @@ def run_backtest(
 
 
 def main() -> None:
-    league_repository = JsonLeagueRepository(
-        file_path="data/leagues.json",
-    )
 
-    team_repository = JsonTeamRepository(
-        file_path="data/teams.json",
-        league_repository=league_repository,
-    )
 
-    match_service = MatchService(
-        team_repository=team_repository,
-    )
-
-    predictor = MMITimeAwarePredictor(
-        match_service=match_service,
-        prediction_engine=PredictionEngine(),
+    predictor = HistoricalMMIPredictor(
+        state_repository=(
+            HistoricalTeamStateRepository()
+        ),
+        rating_builder=(
+            HistoricalRatingBuilder()
+        ),
+        league=League(
+            name="Cyprus First Division",
+            country="Cyprus",
+            average_goals=2.65,
+            home_advantage=1.06,
+        ),
+        prediction_engine=(
+            PredictionEngine()
+        ),
     )
 
     fixture_repository = (

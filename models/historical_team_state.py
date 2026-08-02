@@ -15,3 +15,11 @@ class HistoricalTeamState:
 
     goals_for: int = 0
     goals_against: int = 0
+
+    home_matches: int = 0
+    home_goals_for: int = 0
+    home_goals_against: int = 0
+
+    away_matches: int = 0
+    away_goals_for: int = 0
+    away_goals_against: int = 0

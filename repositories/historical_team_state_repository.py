@@ -48,6 +48,14 @@ class HistoricalTeamStateRepository:
         away.goals_for += away_goals
         away.goals_against += home_goals
 
+        home.home_matches += 1
+        home.home_goals_for += home_goals
+        home.home_goals_against += away_goals
+
+        away.away_matches += 1
+        away.away_goals_for += away_goals
+        away.away_goals_against += home_goals
+
         if home_goals > away_goals:
             home.wins += 1
             away.losses += 1
@@ -59,3 +67,10 @@ class HistoricalTeamStateRepository:
         else:
             home.draws += 1
             away.draws += 1
+
+    def get_all(
+        self,
+    ) -> dict[str, HistoricalTeamState]:
+        return dict(
+            self._states
+        )
