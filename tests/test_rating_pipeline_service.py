@@ -266,3 +266,46 @@ def test_pipeline_rejects_empty_recent_forms():
             recent_forms={},
             league=league,
         )
+
+def test_pipeline_uses_elo_rating():
+    statistics = [
+        create_season_statistics(
+            "Strong Team",
+            True,
+        ),
+        create_season_statistics(
+            "Weak Team",
+            False,
+        ),
+    ]
+
+    recent_forms = {
+        "Strong Team": create_recent_form(True),
+        "Weak Team": create_recent_form(False),
+    }
+
+    without_elo = RatingPipelineService().build(
+        season_statistics=statistics,
+        recent_forms=recent_forms,
+        league=league,
+    )
+
+    with_elo = RatingPipelineService().build(
+        season_statistics=statistics,
+        recent_forms=recent_forms,
+        league=league,
+        elo_ratings={
+            "Strong Team": 20.0,
+            "Weak Team": 95.0,
+        },
+    )
+
+    assert (
+        with_elo[0].attack_rating
+        < without_elo[0].attack_rating
+    )
+
+    assert (
+        with_elo[1].attack_rating
+        > without_elo[1].attack_rating
+    )

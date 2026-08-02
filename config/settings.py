@@ -74,3 +74,17 @@ RECENT_HOME_WEIGHT = 0.20
 
 SEASON_AWAY_WEIGHT = 0.80
 RECENT_AWAY_WEIGHT = 0.20
+
+# Generic rating signal weights
+SEASON_SIGNAL_WEIGHT = 0.60
+RECENT_SIGNAL_WEIGHT = 0.30
+ELO_SIGNAL_WEIGHT = 0.10
+if not round(
+    SEASON_SIGNAL_WEIGHT
+    + RECENT_SIGNAL_WEIGHT
+    + ELO_SIGNAL_WEIGHT,
+    10,
+) == 1:
+    raise ValueError(
+        "Rating signal weights must total 1."
+    )

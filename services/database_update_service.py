@@ -19,6 +19,8 @@ from services.rating_pipeline_service import (
     RatingPipelineService,
 )
 
+from services.elo_service import EloService
+
 
 class DatabaseUpdateService:
 
@@ -33,6 +35,7 @@ class DatabaseUpdateService:
         team_ids: dict[str, int],
         teams_file_path: str,
         backup_directory: str,
+        elo_service: EloService | None = None,
     ) -> None:
         self._statistics_repository = (
             statistics_repository
@@ -51,6 +54,7 @@ class DatabaseUpdateService:
         self._backup_directory = Path(
             backup_directory
         )
+        self._elo_service = elo_service
 
     def update(
         self,
@@ -61,11 +65,16 @@ class DatabaseUpdateService:
         )
 
         recent_forms = self._load_recent_forms()
+        elo_ratings = {}
+
+        if self._elo_service is not None:
+            elo_ratings = self._elo_service.build()
 
         teams = self._rating_pipeline.build(
             season_statistics=season_statistics,
             recent_forms=recent_forms,
             league=league,
+            elo_ratings=elo_ratings,
         )
 
         backup_path = self._create_backup()

@@ -1,12 +1,11 @@
 from engines.rating_builder import (
     RatingBuilder,
 )
-from engines.rating_fusion_engine import (
-    RatingFusionEngine,
-)
+
 from engines.recent_form_rating_builder import (
     RecentFormRatingBuilder,
 )
+from engines.weighted_rating_engine import WeightedRatingEngine
 from exporters.json_team_exporter import (
     JsonTeamExporter,
 )
@@ -26,6 +25,27 @@ from services.rating_pipeline_service import (
     RatingPipelineService,
 )
 
+from engines.elo_engine import EloEngine
+from engines.elo_rating_normalizer import (
+    EloRatingNormalizer,
+)
+from repositories.sportmonks_elo_repository import (
+    SportmonksEloRepository,
+)
+from services.elo_builder_service import (
+    EloBuilderService,
+)
+from services.elo_service import EloService
+from services.team_signal_factory import TeamSignalFactory
+from services.team_signal_factory import TeamSignalFactory
+
+from engines.weighted_rating_engine import (
+    WeightedRatingEngine,
+)
+
+from services.team_signal_factory import (
+    TeamSignalFactory,
+)
 
 CYPRUS_SEASON_ID = 25996
 LEAGUE_NAME = "Cyprus First Division"
@@ -79,7 +99,26 @@ def main() -> None:
         recent_rating_builder=(
             RecentFormRatingBuilder()
         ),
-        fusion_engine=RatingFusionEngine(),
+        weighted_rating_engine=WeightedRatingEngine(),
+        signal_factory=TeamSignalFactory(),
+    )
+
+    elo_repository = SportmonksEloRepository(
+        season_id=CYPRUS_SEASON_ID,
+    )
+
+    elo_builder = EloBuilderService(
+        elo_engine=EloEngine(
+            k_factor=32,
+            home_advantage=100,
+        ),
+        default_rating=1500,
+    )
+
+    elo_service = EloService(
+        repository=elo_repository,
+        builder=elo_builder,
+        normalizer=EloRatingNormalizer(),
     )
 
     exporter = JsonTeamExporter(
@@ -93,13 +132,19 @@ def main() -> None:
         recent_form_repository=(
             recent_form_repository
         ),
-        rating_pipeline=rating_pipeline,
+        rating_pipeline = RatingPipelineService(
+            season_rating_builder=RatingBuilder(),
+            recent_rating_builder=RecentFormRatingBuilder(),
+            weighted_rating_engine=WeightedRatingEngine(),
+            signal_factory=TeamSignalFactory(),
+        ),
         exporter=exporter,
         team_ids=TEAM_IDS,
         teams_file_path="data/teams.json",
         backup_directory=(
             "data/backups/teams"
         ),
+        elo_service=elo_service,
     )
 
     summary = update_service.update(
